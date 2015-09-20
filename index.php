@@ -60,13 +60,13 @@ class botGithub {
 				//PUBLISH YET?
 				if ($this->connectDB()) {
 					$query = $this->conn->prepare('SELECT id_twitter FROM bot_github WHERE nombre LIKE :nombre;');
-				    $query->bindParam(':nombre', $name, PDO::PARAM_STR);
-				    $query->execute();
-				    $result_row = $query->fetchObject();
+				    	$query->bindParam(':nombre', $name, PDO::PARAM_STR);
+				    	$query->execute();
+				    	$result_row = $query->fetchObject();
 
-	                if (isset($result_row->id_twitter)) {
-	                	$existe = true;
-	                }
+	                		if (isset($result_row->id_twitter)) {
+	                			$existe = true;
+	                		}
 				}
 			} while ($existe);
 
