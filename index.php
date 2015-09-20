@@ -34,11 +34,11 @@ class botGithub {
 
 	private $conn = null;
 
-  public function __construct() {
+  	public function __construct() {
 
 		$twitter = new TwitterOAuth (CONSUMER_KEY ,CONSUMER_SECRET , ACCESS_KEY , ACCESS_SECRET );
 
-    //OBTAIN THE STARRED PROJECTS
+    		//OBTAIN THE STARRED PROJECTS
 		$curl = new Curl();
 		$curl->setOpt(CURLOPT_SSL_VERIFYPEER, false);
 		$curl->get(URL_GITHUB);
@@ -50,7 +50,7 @@ class botGithub {
 			$existe = false;
 
 			do {
-			  //PROCESS A BEAUTY STRING
+			  	//PROCESS A BEAUTY STRING
 				$random = array_rand($curl->response);
 				$name = $curl->response[$random]->name;
 				$description = $curl->response[$random]->description;
@@ -70,37 +70,37 @@ class botGithub {
 				}
 			} while ($existe);
 
-		    $tweet = $name.': '.$cutdescription.' '.$home_url;
-		    //TWEET
-	    	$return = $twitter->post('statuses/update', array('status' => $tweet));
+			$tweet = $name.': '.$cutdescription.' '.$home_url;
+		    	//TWEET
+	    		$return = $twitter->post('statuses/update', array('status' => $tweet));
 	    	
-	    	if ($this->connectDB()) {
-	    	  //SAVE THE TWEET
-	    		$query = $this->conn->prepare('INSERT INTO bot_github (nombre, id_twitter) VALUES (:nombre, :id_twitter)');
-			    $query->bindParam(':nombre', $name, PDO::PARAM_STR);
+	    		if ($this->connectDB()) {
+	    	  		//SAVE THE TWEET
+	    			$query = $this->conn->prepare('INSERT INTO bot_github (nombre, id_twitter) VALUES (:nombre, :id_twitter)');
+			    	$query->bindParam(':nombre', $name, PDO::PARAM_STR);
 			   	$query->bindParam(':id_twitter', $return->id, PDO::PARAM_STR);
-			    $query->execute();
-	    	}
+			    	$query->execute();
+	    		}
 
-	    	echo '<pre>';
-	    	print_r($return);
-	 	    echo '</pre>';
+	    		echo '<pre>';
+	    		print_r($return);
+	 	    	echo '</pre>';
 
 		}
 	}
 
 	private function connectDB() {
-        if ($this->conn != null) {
-            return true;
-        } else {
-            try {
-                $this->conn = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
-                return true;
-            } catch (PDOException $e) {
+        	if ($this->conn != null) {
+            		return true;
+        	} else {
+            		try {
+                		$this->conn = new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+                		return true;
+            		} catch (PDOException $e) {
 				echo 'Error: '.$e->getMessage();
-            }
-        }
-        return false;
+            		}
+        	}
+        	return false;
 	}
 
 }
